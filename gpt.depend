@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1742943300 source:c:\users\lenovo\desktop\thuchanh\gpt\main.cpp
+1743036641 source:c:\users\lenovo\desktop\thuchanh\gpt\main.cpp
 	"jewelgame.h"
 
 1660924118 c:\users\lenovo\documents\sdl2-2.24.0\x86_64-w64-mingw32\include\sdl2\sdl.h
@@ -402,10 +402,11 @@
 	"begin_code.h"
 	"close_code.h"
 
-1742944506 source:c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.cpp
+1743072945 source:c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.cpp
 	"jewelgame.h"
+	"texturemanager.h"
 
-1742943798 c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.h
+1743072586 c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
@@ -415,6 +416,8 @@
 	<ctime>
 	<string>
 	<algorithm>
+	<fstream>
+	<map>
 
 1738962281 c:\users\lenovo\documents\sdl2-2.24.0\x86_64-w64-mingw32\include\sdl2\sdl_mixer.h
 	"SDL_stdinc.h"
@@ -424,4 +427,14 @@
 	"SDL_version.h"
 	"begin_code.h"
 	"close_code.h"
+
+1743072586 source:c:\users\lenovo\desktop\thuchanh\gpt\texturemanager.cpp
+	"texturemanager.h"
+
+1743072586 c:\users\lenovo\desktop\thuchanh\gpt\texturemanager.h
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<map>
+	<string>
 

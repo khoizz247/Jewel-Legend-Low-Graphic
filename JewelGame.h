@@ -10,6 +10,8 @@
 #include <ctime>
 #include <string>
 #include <algorithm>
+#include <fstream>
+#include <map>
 
 // Constants (Keep them in the header for easy access)
 const int SCREEN_WIDTH = 1000;
@@ -22,9 +24,19 @@ const int NUM_JEWEL_TYPES = 6;
 enum class GameState {
     MainMenu,
     Playing,
-    Instructions
+    Instructions,
+    Paused
 };
 
+// Forward Declaration
+class TextureManager; // TextureManager là class riêng, forward declaration ở đây
+//Struct for score event
+struct ScoreEvent {
+    int points;
+    int combo;
+    int matchSize;
+    Uint32 timestamp;
+};
 class JewelGame {
 private:
     SDL_Window* window;
@@ -36,18 +48,12 @@ private:
 
     int selectedX1, selectedY1;
     int selectedX2, selectedY2;
-
     bool isSelecting;
+    float selectedScale = 1.0f;
+
     int score;
     int highScore;
     int combo;
-
-    struct ScoreEvent {
-        int points;
-        int combo;
-        int matchSize;
-        Uint32 timestamp;
-    };
     std::vector<ScoreEvent> scoreHistory;
 
     std::mt19937 rng;
@@ -57,13 +63,36 @@ private:
 
     GameState gameState; // Current game state
 
-    // Menu Button Rectangles
+    // Button Rectangles
     SDL_Rect startButtonRect;
     SDL_Rect instructionsButtonRect;
-    SDL_Rect backButtonRect; // Back Button for Instructions Screen
+    SDL_Rect backButtonRect;
+    SDL_Rect shuffleButtonRect;
+    SDL_Rect restartButtonRect;
+    SDL_Rect pauseButtonRect;
+    SDL_Rect continueButtonRect; //Continue Button
+
+    //Shuffle variable
+    int shuffleRemaining = 3;
 
     //Background
     SDL_Texture* backgroundTexture;
+
+    // Jewel Textures
+    SDL_Texture* jewelTextures[NUM_JEWEL_TYPES];
+
+    //High score file name
+    const std::string highScoreFile = "highscore.txt";
+    const std::string saveGameFile = "savegame.txt"; //File to save paused game.
+
+    //Animation Variable Declaration.
+    bool isSwapping = false;
+    float swapProgress = 0.0f;
+    float swapDuration = 200.0f;
+    int animStartX1, animStartY1, animStartX2, animStartY2;
+    bool isAnimatingMatch[BOARD_SIZE][BOARD_SIZE] = {false}; // For match animation
+    float matchedScale[BOARD_SIZE][BOARD_SIZE] = {1.0f}; // Scale for match animation
+    float jewelOffsetY[BOARD_SIZE][BOARD_SIZE] = {0.0f}; //Offset for falling animation.
 
     //Function for draw button
     void drawButton(SDL_Rect rect, const std::string& text, SDL_Color color);
@@ -74,8 +103,29 @@ private:
     //Render Instruction Screen
     void renderInstructions();
 
+    //Render scoreboard
+    void renderScoreboard();
+
     //Handle button click event
     void handleMainMenuClick(int x, int y);
+
+    // Load and Save High Score
+    void loadHighScore();
+    void saveHighScore();
+
+    // Restart Game Function
+    void restartGame();
+
+    //Pause/Resume Function
+    void pauseGame();
+
+    //Save and Load game state
+    void saveGameState();
+    bool loadGameState(); // Return whether load was successful.
+
+private:
+    // Texture loading helper  (This is for texturemanager, not here!)
+    //SDL_Texture* loadTexture(const std::string& filePath); // Removed from Public
 
 public:
     JewelGame();
@@ -97,10 +147,13 @@ private:
     void dropJewels();
     void processCascadeMatches();
     void renderText(const std::string& text, int x, int y, SDL_Color color);
-    void renderScoreboard();
     void render();
     bool initFont();
     bool init();
+
+    void updateSwapAnimation(float deltaTime);
+    void updateFallingAnimations(float deltaTime);
+    void updateMatchAnimations(float deltaTime);
 };
 
 #endif
