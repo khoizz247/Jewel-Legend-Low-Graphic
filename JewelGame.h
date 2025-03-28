@@ -1,5 +1,3 @@
-
-
 #ifndef JEWELGAME_H
 #define JEWELGAME_H
 

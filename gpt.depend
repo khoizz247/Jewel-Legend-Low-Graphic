@@ -1,6 +1,26 @@
 # depslib dependency file v1.0
-1743036641 source:c:\users\lenovo\desktop\thuchanh\gpt\main.cpp
+1743191443 source:c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.cpp
 	"jewelgame.h"
+	"texturemanager.h"
+	<fstream>
+	<ctime>
+	<random>
+	<iostream>
+	<sstream>
+	<iomanip>
+
+1743191425 c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<random>
+	<iostream>
+	<vector>
+	<string>
+	<algorithm>
+	<fstream>
+	<map>
 
 1660924118 c:\users\lenovo\documents\sdl2-2.24.0\x86_64-w64-mingw32\include\sdl2\sdl.h
 	"SDL_main.h"
@@ -402,29 +422,6 @@
 	"begin_code.h"
 	"close_code.h"
 
-1743190749 source:c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.cpp
-	"jewelgame.h"
-	"texturemanager.h"
-	<fstream>
-	<ctime>
-	<random>
-	<iostream>
-	<sstream>
-	<iomanip>
-
-1743190749 c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.h
-	<SDL.h>
-	<SDL_image.h>
-	<SDL_ttf.h>
-	<SDL_mixer.h>
-	<random>
-	<iostream>
-	<vector>
-	<string>
-	<algorithm>
-	<fstream>
-	<map>
-
 1738962281 c:\users\lenovo\documents\sdl2-2.24.0\x86_64-w64-mingw32\include\sdl2\sdl_mixer.h
 	"SDL_stdinc.h"
 	"SDL_rwops.h"
@@ -434,9 +431,6 @@
 	"begin_code.h"
 	"close_code.h"
 
-1743072586 source:c:\users\lenovo\desktop\thuchanh\gpt\texturemanager.cpp
-	"texturemanager.h"
-
 1743072586 c:\users\lenovo\desktop\thuchanh\gpt\texturemanager.h
 	<SDL.h>
 	<SDL_image.h>
@@ -444,35 +438,9 @@
 	<map>
 	<string>
 
-1743189507 source:c:\users\lenovo\desktop\thuchanh\gpt\board.cpp
+1743036641 source:c:\users\lenovo\desktop\thuchanh\gpt\main.cpp
 	"jewelgame.h"
 
-1743189507 source:c:\users\lenovo\desktop\thuchanh\gpt\gamelogic.cpp
-	"jewelgame.h"
-
-1743188933 source:c:\users\lenovo\desktop\thuchanh\gpt\audio.cpp
-	"audio.h"
-
-1743189626 c:\users\lenovo\desktop\thuchanh\gpt\audio.h
-	"jewelgame.h"
-
-1743188933 source:c:\users\lenovo\desktop\thuchanh\gpt\input.cpp
-	"input.h"
-
-1743190593 c:\users\lenovo\desktop\thuchanh\gpt\input.h
-	"jewelgame.h"
-
-1743188933 source:c:\users\lenovo\desktop\thuchanh\gpt\render.cpp
-	"render.h"
-	<sstream>
-
-1743190593 c:\users\lenovo\desktop\thuchanh\gpt\render.h
-	"jewelgame.h"
-	<SDL.h>
-
-1743190593 c:\users\lenovo\desktop\thuchanh\gpt\gamelogic.h
-	"jewelgame.h"
-
-1743190593 c:\users\lenovo\desktop\thuchanh\gpt\saveload.h
-	"jewelgame.h"
+1743072586 source:c:\users\lenovo\desktop\thuchanh\gpt\texturemanager.cpp
+	"texturemanager.h"
 
