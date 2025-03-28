@@ -4,22 +4,22 @@
 #include <ctime>
 #include <random>
 #include <iostream>
-#include <sstream> // Thêm include này
+#include <sstream>
 #include <iomanip>
-// Constructor
+
 JewelGame::JewelGame() : window(nullptr), renderer(nullptr), font(nullptr),
                   selectedX1(-1), selectedY1(-1),
                   selectedX2(-1), selectedY2(-1),
                   isSelecting(false), score(0),
                   highScore(0), combo(0),
-                  rng(std::mt19937(std::random_device{}())),  // Sử dụng std::random_device để khởi tạo
+                  rng(std::mt19937(std::random_device{}())),
                   boardOffsetX(0), boardOffsetY(0),
                   gameState(GameState::MainMenu),
                   shuffleRemaining(3),
                   backgroundTexture(nullptr),
                   isSwapping(false), swapProgress(0.0f), swapDuration(0.0f),
                   selectedScale(1.0f) {
-    // Button Rectangles
+
     startButtonRect = {SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 - 150, 200, 50};
     continueButtonRect = {SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 - 50, 200, 50};
     instructionsButtonRect = {SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 + 50, 200, 50};
@@ -31,12 +31,12 @@ JewelGame::JewelGame() : window(nullptr), renderer(nullptr), font(nullptr),
     continueButtonRect_pause = {SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 - 50, 200, 50};
 
 
-    // Jewel Textures Initialization
+    // Khởi tạo texture của đá qusy
     for (int i = 0; i < NUM_JEWEL_TYPES; ++i) {
         jewelTextures[i] = nullptr;
     }
 
-    // Animation Arrays Initialization
+    // Khởi tạo các mảng hoạt ảnh
     for (int y = 0; y < BOARD_SIZE; ++y) {
         for (int x = 0; x < BOARD_SIZE; ++x) {
             isAnimatingMatch[y][x] = false;
@@ -45,7 +45,7 @@ JewelGame::JewelGame() : window(nullptr), renderer(nullptr), font(nullptr),
         }
     }
 
-    // Khởi tạo danh sách Timed Mode Levels
+    // Khởi tạo Levels
     timedModeLevels = {
         {1, 5 * 60, 1500, "Level 1 (5 Minutes - 1500)", 1500}, // Điểm số mục tiêu 5000
         {2, 10 * 60, 3500, "Level 2 (10 Minutes - 3500)", 3500}, // Điểm số mục tiêu 12000
@@ -68,12 +68,12 @@ JewelGame::JewelGame() : window(nullptr), renderer(nullptr), font(nullptr),
     loadHighScore();
 }
 
-// Destructor
+
 JewelGame::~JewelGame() {
     cleanup();
 }
 
-// Game Loop
+// Vòng lặp chính - Game logic
 void JewelGame::run() {
     if (!init()) return;
 
@@ -111,7 +111,7 @@ void JewelGame::run() {
                 timedModeStartTime = currentTime;
 
                 TimedModeLevel currentLevel = timedModeLevels[selectedTimedModeLevel];
-                std::cout << "Score: " << score << ", Target: " << currentLevel.targetScore << ", Time: " << timeRemaining << std::endl;  // DEBUG
+                std::cout << "Score: " << score << ", Target: " << currentLevel.targetScore << ", Time: " << timeRemaining << std::endl;
 
                 if (score >= currentLevel.targetScore) {
                     // Thắng cuộc!
@@ -144,23 +144,23 @@ void JewelGame::run() {
     cleanup();
 }
 
-// Cleanup
+
 void JewelGame::cleanup() {
     if (font) {
         TTF_CloseFont(font);
         TTF_Quit();
     }
 
-    // Release Textures
+    // Giải phóng texture
     TextureManager::Instance()->clear();
 
-    // Release Sound Effects
+    // Gphong sound effc
     for (auto& pair : m_soundEffects) {
         Mix_FreeChunk(pair.second);
     }
     m_soundEffects.clear();
 
-    // Release Background Music
+    // Gphong bgroun music
     if (m_backgroundMusic) {
         Mix_FreeMusic(m_backgroundMusic);
     }
@@ -177,7 +177,7 @@ void JewelGame::cleanup() {
     SDL_Quit();
 }
 
-// Board Initialization
+//Khởi tạo bảng 8x8 đá quý
 void JewelGame::initBoard() {
     for (int y = 0; y < BOARD_SIZE; y++) {
         for (int x = 0; x < BOARD_SIZE; x++) {
@@ -196,7 +196,7 @@ void JewelGame::initBoard() {
     } while (hasInitialMatches);
 }
 
-// Random Jewel Generation
+// Hàm tạo ngẫu nhiên đá
 int JewelGame::getRandomJewel(int x, int y) {
     std::vector<int> possibleJewels;
     for (int jewel = 0; jewel < NUM_JEWEL_TYPES; ++jewel) {
@@ -215,16 +215,16 @@ int JewelGame::getRandomJewel(int x, int y) {
     return possibleJewels[index];
 }
 
-// Check for Match at Position
+// Hàm check điều kiện ăn đá
 bool JewelGame::isMatchAt(int x, int y, int jewel) {
-    // Check horizontal match
+    // ngang
     if (x >= 2 &&
         board[y][x - 1] == jewel &&
         board[y][x - 2] == jewel) {
         return true;
     }
 
-    // Check vertical match
+    // dọc
     if (y >= 2 &&
         board[y - 1][x] == jewel &&
         board[y - 2][x] == jewel) {
@@ -234,7 +234,7 @@ bool JewelGame::isMatchAt(int x, int y, int jewel) {
     return false;
 }
 
-// Handle Mouse Click
+
 void JewelGame::handleMouseClick(int mouseX, int mouseY) {
     std::cout << "Mouse click at: (" << mouseX << ", " << mouseY << ")" << std::endl;  // DEBUG
     if (gameState == GameState::MainMenu) {
@@ -343,7 +343,7 @@ void JewelGame::handleMouseClick(int mouseX, int mouseY) {
     }
 }
 
-// Process Swapped Jewels
+
 bool JewelGame::processSwappedJewels(int x, int y) {
     bool hasMatches = false;
 
@@ -368,7 +368,6 @@ bool JewelGame::processSwappedJewels(int x, int y) {
     return hasMatches;
 }
 
-// Count Matched Jewels
 bool JewelGame::isButtonClicked(int x, int y, SDL_Rect rect) {
     return (x >= rect.x && x <= rect.x + rect.w &&
             y >= rect.y && y <= rect.y + rect.h);
@@ -386,7 +385,6 @@ int JewelGame::countMatchedJewels() {
     return count;
 }
 
-// Calculate Score
 void JewelGame::calculateScore(int matchedJewels, int comboMultiplier) {
     int basePoints = 0;
 
@@ -426,17 +424,17 @@ void JewelGame::calculateScore(int matchedJewels, int comboMultiplier) {
     }
 }
 
-// Swap Jewels
+
 void JewelGame::swapJewels() {
     std::swap(board[selectedY1][selectedX1], board[selectedY2][selectedX2]);
 }
 
-// Check for Matches and Mark
+// hàm check và đánh đánh dấu các đá được ăn
 bool JewelGame::checkMatchesAndMarkMatched() {
     memset(matched, 0, sizeof(matched));
     bool hasMatches = false;
 
-    // Horizontal
+
     for (int y = 0; y < BOARD_SIZE; y++) {
         for (int x = 0; x < BOARD_SIZE - 2; x++) {
             if (board[y][x] != -1 &&
@@ -457,7 +455,7 @@ bool JewelGame::checkMatchesAndMarkMatched() {
         }
     }
 
-    // Vertical
+
     for (int x = 0; x < BOARD_SIZE; x++) {
         for (int y = 0; y < BOARD_SIZE - 2; y++) {
             if (board[y][x] != -1 &&
@@ -481,7 +479,7 @@ bool JewelGame::checkMatchesAndMarkMatched() {
     return hasMatches;
 }
 
-// Remove Matches
+// Bỏ các đá được ăn
 void JewelGame::removeMatches() {
      Mix_Chunk* matchSound = m_soundEffects["res/match.wav"];
      if (matchSound) {
@@ -499,7 +497,7 @@ void JewelGame::removeMatches() {
     }
 }
 
-// Drop Jewels
+// Thả đá lấp đầy
 void JewelGame::dropJewels() {
     float columnDropDelay[BOARD_SIZE] = {0};
 
@@ -541,7 +539,7 @@ void JewelGame::dropJewels() {
     processCascadeMatches();
 }
 
-// Process Cascade Matches
+// Hàm cho phép ăn các đá được match 1 cách liên tiếp
 void JewelGame::processCascadeMatches() {
     bool hasMatches;
 
@@ -563,11 +561,10 @@ void JewelGame::processCascadeMatches() {
     }
 }
 
-// Restart Game
-// Trong jewelgame.cpp
+
 
 void JewelGame::restartGame() {
-    std::cout << "Restarting Game - Returning to Main Menu" << std::endl; // Debug
+    std::cout << "Restarting Game - Returning to Main Menu" << std::endl;
 
     score = 0;
     combo = 0;
@@ -576,7 +573,7 @@ void JewelGame::restartGame() {
     memset(isAnimatingMatch, 0, sizeof(isAnimatingMatch));
     scoreHistory.clear();
 
-    initBoard(); // Khởi tạo lại bảng (tuỳ chọn, nếu bạn muốn có một bảng mới khi quay lại Main Menu)
+    initBoard(); // tạo lại bảng mới
 
     gameState = GameState::MainMenu; // Trở về Main Menu
     isTimedMode = false;
@@ -596,9 +593,7 @@ void JewelGame::pauseGame() {
     }
 }
 
-// Save Game State
 
-// Trong jewelgame.cpp
 
 void JewelGame::saveGameState() {
     std::ofstream file(saveGameFile);
@@ -608,7 +603,6 @@ void JewelGame::saveGameState() {
         file << combo << std::endl;
         file << shuffleRemaining << std::endl;
         file << playerMoney << std::endl;
-        // Lưu các biến Timed Mode
         file << isTimedMode << std::endl;
         file << timeRemaining << std::endl;
         file << selectedTimedModeLevel << std::endl;
@@ -628,9 +622,7 @@ void JewelGame::saveGameState() {
     }
 }
 
-// Load Game State
 
-// Trong jewelgame.cpp
 
 bool JewelGame::loadGameState() {
     std::ifstream file(saveGameFile);
@@ -640,7 +632,6 @@ bool JewelGame::loadGameState() {
         file >> combo;
         file >> shuffleRemaining;
         file >> playerMoney;
-        // Đọc các biến Timed Mode
         file >> isTimedMode;
         file >> timeRemaining;
         file >> selectedTimedModeLevel;
@@ -663,7 +654,7 @@ if(isTimedMode){
     }
 }
 
-// Initialization
+// Hàm khởi tạo
 bool JewelGame::init() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         std::cerr << "SDL init failed: " << SDL_GetError() << std::endl;
@@ -690,27 +681,27 @@ bool JewelGame::init() {
         return false;
     }
 
-    // Initialize SDL_image
+    // khởi tạo SDL_image
     int imgFlags = IMG_INIT_PNG;
     if (!(IMG_Init(imgFlags) & imgFlags)) {
         std::cerr << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
         return false;
     }
 
-    //Initialize SDL_mixer
+    //khởi tạo SDL_mixer
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
         std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
         return false;
     }
 
-    // Load background texture
+    // chuyển sang texture
     backgroundTexture = TextureManager::Instance()->loadTexture("res/background.png", renderer);
     if (!backgroundTexture) {
         std::cerr << "Failed to load background image!" << std::endl;
         return false;
     }
 
-    // Load Jewel Textures
+    // tải các texture đá quý
     jewelTextures[0] = TextureManager::Instance()->loadTexture("res/jewel_red.png", renderer);
     jewelTextures[1] = TextureManager::Instance()->loadTexture("res/jewel_green.png", renderer);
     jewelTextures[2] = TextureManager::Instance()->loadTexture("res/jewel_blue.png", renderer);
@@ -725,12 +716,12 @@ bool JewelGame::init() {
         }
     }
 
-    //Load Sound Effect
+    //tải Sound Effect
     loadSound("res/swap.wav");
     loadSound("res/match.wav");
     loadSound("res/drop.wav");
 
-    //Load Background Music
+    //tải Background Music
     loadBackgroundMusic("res/background_music.mp3");
 
     boardOffsetX = (SCREEN_WIDTH - BOARD_SIZE * GRID_SIZE) / 2;
@@ -738,7 +729,7 @@ bool JewelGame::init() {
 
     loadHighScore();
 
-    //Play background music
+    //bật background music
     if (m_backgroundMusic) {
         Mix_PlayMusic(m_backgroundMusic, -1);
     }
@@ -746,7 +737,7 @@ bool JewelGame::init() {
     return true;
 }
 
-// Load High Score
+
 bool JewelGame::loadHighScore() {
     std::ifstream file(highScoreFile);
     if (file.is_open()) {
@@ -768,7 +759,7 @@ bool JewelGame::loadHighScore() {
 }
 
 
-// Save High Score
+
 bool JewelGame::saveHighScore() {
     std::ofstream file(highScoreFile);
     if (file.is_open()) {
@@ -781,7 +772,7 @@ bool JewelGame::saveHighScore() {
     }
 }
 
-// Update Swap Animation
+// Hàm tạo hoạt ảnh đổi đá
 void JewelGame::updateSwapAnimation(float deltaTime) {
     if (!isSwapping) return;
 
@@ -793,7 +784,7 @@ void JewelGame::updateSwapAnimation(float deltaTime) {
     }
 }
 
-// Update Falling Animations
+// Hàm tạo hoạt ảnh rơi
 void JewelGame::updateFallingAnimations(float deltaTime) {
    for (int y = 0; y < BOARD_SIZE; y++) {
         for (int x = 0; x < BOARD_SIZE; x++) {
@@ -804,7 +795,7 @@ void JewelGame::updateFallingAnimations(float deltaTime) {
     }
 }
 
-// Update a single jewel's falling animation
+// Tạo các khoảng trống ảo cho phép đá rơi 1 cách lần lượt
 void JewelGame::updateJewelFall(int x, int y, float deltaTime) {
     jewelOffsetY[y][x] += deltaTime * JEWEL_FALL_SPEED;
 
@@ -813,7 +804,7 @@ void JewelGame::updateJewelFall(int x, int y, float deltaTime) {
     }
 }
 
-// Update Match Animations
+// tạo hoạt ảnh khi đá dược ăn
 void JewelGame::updateMatchAnimations(float deltaTime) {
     for (int y = 0; y < BOARD_SIZE; y++) {
         for (int x = 0; x < BOARD_SIZE; x++) {
@@ -828,7 +819,7 @@ void JewelGame::updateMatchAnimations(float deltaTime) {
     }
 }
 
-// Draw Button
+
 void JewelGame::drawButton(SDL_Rect rect, const std::string& text, SDL_Color color) {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderFillRect(renderer, &rect);
@@ -837,7 +828,7 @@ void JewelGame::drawButton(SDL_Rect rect, const std::string& text, SDL_Color col
     renderText(text, rect.x + rect.w / 2 - text.length() * 5, rect.y + rect.h / 2 - 9, textColor);
 }
 
-//Load Sound Effect
+//tải Sound Effect
 Mix_Chunk* JewelGame::loadSound(const std::string& filePath) {
     if (m_soundEffects.find(filePath) != m_soundEffects.end()) {
         return m_soundEffects[filePath];
@@ -853,7 +844,7 @@ Mix_Chunk* JewelGame::loadSound(const std::string& filePath) {
     return sound;
 }
 
-//Load Background Music
+//tải Background Music
 bool JewelGame::loadBackgroundMusic(const std::string& filePath) {
     m_backgroundMusic = Mix_LoadMUS(filePath.c_str());
     if (m_backgroundMusic == nullptr) {
@@ -863,7 +854,7 @@ bool JewelGame::loadBackgroundMusic(const std::string& filePath) {
     return true;
 }
 
-// Render Main Menu
+// Vẽ Main Menu
 void JewelGame::renderMainMenu() {
     std::cout << "Rendering Main Menu" << std::endl;  // DEBUG
     SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
@@ -885,7 +876,7 @@ void JewelGame::renderMainMenu() {
     drawButton(instructionsButtonRect, "Instructions", buttonColor);
 }
 
-// Render Instructions
+// Vẽ Instructions
 void JewelGame::renderInstructions() {
     SDL_Color backgroundColor = {50, 50, 50, 255};
     SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
@@ -902,7 +893,7 @@ void JewelGame::renderInstructions() {
     drawButton(backButtonRect, "Back", buttonColor);
 }
 
-// Render Scoreboard
+// Vẽ Scoreboard
 void JewelGame::renderScoreboard() {
     SDL_Rect scoreboardRect = {
         SCREEN_WIDTH - 200,
@@ -949,7 +940,7 @@ void JewelGame::renderScoreboard() {
     drawButton(pauseButtonRect, "Pause", {200, 100, 100, 255});
 }
 
-// Function to render the game board
+// Tạo bảng game 8x8
 void JewelGame::renderBoard() {
     int boardOffsetX = (SCREEN_WIDTH - BOARD_SIZE * GRID_SIZE) / 2;
     int boardOffsetY = (SCREEN_HEIGHT - BOARD_SIZE * GRID_SIZE) / 2;
@@ -1038,7 +1029,7 @@ void JewelGame::renderGameOver(){
     SDL_Color buttonColor = {100, 100, 200, 255};
     drawButton(backToMainMenuButtonRect, "Back to Main Menu", buttonColor);
 }
-// Handle Main Menu Click
+//  Main Menu Click
 void JewelGame::handleMainMenuClick(int x, int y) {
     std::cout << "Handling Main Menu Click" << std::endl;  // DEBUG
     if (isButtonClicked(x, y, startButtonRect)) {
@@ -1098,14 +1089,14 @@ void JewelGame::startTimedMode(int levelIndex) {
     // Lấy thông tin level đã chọn
     TimedModeLevel selectedLevel = timedModeLevels[levelIndex];
 
-    // **Ở ĐÂY BẠN SẼ THÊM LOGIC ĐỂ TRỪ TIỀN CỦA NGƯỜI CHƠI**
+    // Update trong tương lai
     if (playerMoney >= selectedLevel.price) {
         playerMoney -= selectedLevel.price;
     } else {
-         // Thông báo không đủ tiền, có thể chuyển về Main Menu hoặc Level Selection
+
          std::cout << "Not enough money to start this level!" << std::endl;
          gameState = GameState::TimedModeLevelSelection;
-         selectedTimedModeLevel = -1; // Reset level đã chọn
+         selectedTimedModeLevel = -1;
          return;
     }
 
@@ -1121,7 +1112,7 @@ void JewelGame::startTimedMode(int levelIndex) {
 
 }
 
-// Initialize Font
+// Tạo phông arial
 bool JewelGame::initFont() {
     if (TTF_Init() == -1) {
         std::cerr << "SDL_ttf could not initialize! SDL_ttf Error: "
@@ -1140,7 +1131,7 @@ bool JewelGame::initFont() {
     return true;
 }
 
-// Render Text
+// Khởi tạo chữ
 void JewelGame::renderText(const std::string &text, int x, int y, SDL_Color color) {
     SDL_Surface *surfaceMessage = TTF_RenderText_Solid(font, text.c_str(), color);
     SDL_Texture *message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
@@ -1152,7 +1143,7 @@ void JewelGame::renderText(const std::string &text, int x, int y, SDL_Color colo
     SDL_DestroyTexture(message);
 }
 
-// Render
+
 void JewelGame::render() {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
@@ -1201,7 +1192,7 @@ void JewelGame::render() {
     SDL_RenderPresent(renderer);
 }
 
-// Board Utilities
+// Tráo bài
 void JewelGame::shuffleBoard() {
     std::vector<int> jewels;
     for (int y = 0; y < BOARD_SIZE; ++y) {

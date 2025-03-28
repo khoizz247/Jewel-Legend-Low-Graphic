@@ -9,7 +9,7 @@
 	<sstream>
 	<iomanip>
 
-1743191425 c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.h
+1743193229 c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
@@ -431,7 +431,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1743072586 c:\users\lenovo\desktop\thuchanh\gpt\texturemanager.h
+1743193229 c:\users\lenovo\desktop\thuchanh\gpt\texturemanager.h
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>

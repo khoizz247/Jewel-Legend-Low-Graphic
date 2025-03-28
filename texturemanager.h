@@ -2,7 +2,7 @@
 #define TEXTUREMANAGER_H
 
 #include <SDL.h>
-#include <SDL_image.h> // Cần thiết cho IMG_LoadTexture
+#include <SDL_image.h>
 
 #include <iostream>
 #include <map>
@@ -10,16 +10,17 @@
 
 class TextureManager {
 public:
-    static TextureManager* Instance(); //Singleton
+    static TextureManager* Instance();
     SDL_Texture* loadTexture(const std::string& filePath, SDL_Renderer* renderer);
     void clear();
 
 private:
-    TextureManager(); //Private, singleton only
+    TextureManager();
     ~TextureManager();
 
     static TextureManager* s_pInstance;
-    std::map<std::string, SDL_Texture*> m_textureMap; // Cache loaded textures.
+    std::map<std::string, SDL_Texture*> m_textureMap; // Tải texture
+
 };
 
 #endif
