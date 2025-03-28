@@ -402,18 +402,24 @@
 	"begin_code.h"
 	"close_code.h"
 
-1743072945 source:c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.cpp
+1743190749 source:c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.cpp
 	"jewelgame.h"
 	"texturemanager.h"
+	<fstream>
+	<ctime>
+	<random>
+	<iostream>
+	<sstream>
+	<iomanip>
 
-1743072586 c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.h
+1743190749 c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<random>
 	<iostream>
 	<vector>
-	<random>
-	<ctime>
 	<string>
 	<algorithm>
 	<fstream>
@@ -437,4 +443,36 @@
 	<iostream>
 	<map>
 	<string>
+
+1743189507 source:c:\users\lenovo\desktop\thuchanh\gpt\board.cpp
+	"jewelgame.h"
+
+1743189507 source:c:\users\lenovo\desktop\thuchanh\gpt\gamelogic.cpp
+	"jewelgame.h"
+
+1743188933 source:c:\users\lenovo\desktop\thuchanh\gpt\audio.cpp
+	"audio.h"
+
+1743189626 c:\users\lenovo\desktop\thuchanh\gpt\audio.h
+	"jewelgame.h"
+
+1743188933 source:c:\users\lenovo\desktop\thuchanh\gpt\input.cpp
+	"input.h"
+
+1743190593 c:\users\lenovo\desktop\thuchanh\gpt\input.h
+	"jewelgame.h"
+
+1743188933 source:c:\users\lenovo\desktop\thuchanh\gpt\render.cpp
+	"render.h"
+	<sstream>
+
+1743190593 c:\users\lenovo\desktop\thuchanh\gpt\render.h
+	"jewelgame.h"
+	<SDL.h>
+
+1743190593 c:\users\lenovo\desktop\thuchanh\gpt\gamelogic.h
+	"jewelgame.h"
+
+1743190593 c:\users\lenovo\desktop\thuchanh\gpt\saveload.h
+	"jewelgame.h"
 

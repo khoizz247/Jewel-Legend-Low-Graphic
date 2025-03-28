@@ -45,6 +45,8 @@
 		<Unit filename="JewelGame.cpp" />
 		<Unit filename="JewelGame.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="texturemanager.cpp" />
+		<Unit filename="texturemanager.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

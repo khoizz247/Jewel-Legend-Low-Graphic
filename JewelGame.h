@@ -1,42 +1,59 @@
+
+
 #ifndef JEWELGAME_H
 #define JEWELGAME_H
 
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
+#include <random>
 #include <iostream>
 #include <vector>
-#include <random>
-#include <ctime>
 #include <string>
 #include <algorithm>
 #include <fstream>
 #include <map>
 
-// Constants (Keep them in the header for easy access)
+// Constants
 const int SCREEN_WIDTH = 1000;
 const int SCREEN_HEIGHT = 600;
 const int BOARD_SIZE = 8;
 const int GRID_SIZE = 64;
 const int NUM_JEWEL_TYPES = 6;
+const float JEWEL_FALL_SPEED = 0.5f; // Fall speed of jewels
+const float MATCH_ANIMATION_SPEED = 50.0f; // Speed of match animation
 
-// Define Game States
+// Game States
 enum class GameState {
     MainMenu,
     Playing,
     Instructions,
-    Paused
+    Paused,
+    ModeSelection, // Trang chọn chế độ chơi (Normal/Timed)
+    TimedModeLevelSelection, // Trang chọn level của Timed Mode
+    GameOver
 };
 
-// Forward Declaration
-class TextureManager; // TextureManager là class riêng, forward declaration ở đây
-//Struct for score event
+// Forward Declarations
+class TextureManager;
+
+// Score Event Structure
 struct ScoreEvent {
     int points;
     int combo;
     int matchSize;
     Uint32 timestamp;
 };
+
+struct TimedModeLevel {
+    int level;
+    int duration; // Thời gian tính bằng giây
+    int price;
+    std::string name; // Tên hiển thị cho level
+    int targetScore; // Điểm số mục tiêu
+};
+
 class JewelGame {
 private:
     SDL_Window* window;
@@ -61,7 +78,7 @@ private:
     int boardOffsetX;
     int boardOffsetY;
 
-    GameState gameState; // Current game state
+    GameState gameState;
 
     // Button Rectangles
     SDL_Rect startButtonRect;
@@ -70,70 +87,82 @@ private:
     SDL_Rect shuffleButtonRect;
     SDL_Rect restartButtonRect;
     SDL_Rect pauseButtonRect;
-    SDL_Rect continueButtonRect; //Continue Button
+    SDL_Rect continueButtonRect;
+    SDL_Rect continueButtonRect_pause;
 
-    //Shuffle variable
     int shuffleRemaining = 3;
 
-    //Background
     SDL_Texture* backgroundTexture;
-
-    // Jewel Textures
     SDL_Texture* jewelTextures[NUM_JEWEL_TYPES];
 
-    //High score file name
     const std::string highScoreFile = "highscore.txt";
-    const std::string saveGameFile = "savegame.txt"; //File to save paused game.
+    const std::string saveGameFile = "savegame.txt";
 
-    //Animation Variable Declaration.
+    // Animation Variables
     bool isSwapping = false;
     float swapProgress = 0.0f;
     float swapDuration = 200.0f;
     int animStartX1, animStartY1, animStartX2, animStartY2;
-    bool isAnimatingMatch[BOARD_SIZE][BOARD_SIZE] = {false}; // For match animation
-    float matchedScale[BOARD_SIZE][BOARD_SIZE] = {1.0f}; // Scale for match animation
-    float jewelOffsetY[BOARD_SIZE][BOARD_SIZE] = {0.0f}; //Offset for falling animation.
+    bool isAnimatingMatch[BOARD_SIZE][BOARD_SIZE] = {false};
+    float matchedScale[BOARD_SIZE][BOARD_SIZE] = {1.0f};
+    float jewelOffsetY[BOARD_SIZE][BOARD_SIZE] = {0.0f};
 
-    //Function for draw button
+    // Sound Variables
+    std::map<std::string, Mix_Chunk*> m_soundEffects;
+    Mix_Music* m_backgroundMusic = nullptr;
+
+    // Các biến Timed Mode
+    bool isTimedMode = false;
+    int timeRemaining; // Thời gian còn lại tính bằng giây
+    Uint32 timedModeStartTime; // Thời gian bắt đầu Timed Mode
+
+    // Các biến tiền tệ
+    int playerMoney = 10000;
+
+    std::vector<TimedModeLevel> timedModeLevels; // Danh sách các level Timed Mode
+    SDL_Rect timedModeButtonRect;
+    SDL_Rect normalModeButtonRect;
+    std::vector<SDL_Rect> timedModeLevelButtonRects; // Các nút chọn level Timed Mode
+    int selectedTimedModeLevel = -1; // Level Timed Mode đã chọn (-1 nghĩa là chưa chọn)
+
+    // Game Over Variables
+    std::string winLoseMessage; // Thông báo thắng/thua
+    SDL_Rect backToMainMenuButtonRect;
+
+    // Helper Functions
     void drawButton(SDL_Rect rect, const std::string& text, SDL_Color color);
+    bool isButtonClicked(int x, int y, SDL_Rect rect);
+    Mix_Chunk* loadSound(const std::string& filePath);
+    bool loadBackgroundMusic(const std::string& filePath);
+    void updateJewelFall(int x, int y, float deltaTime);
 
-    //Render the Main Menu
+    // Board Utilities
+    void shuffleBoard();
+    void countJewelTypes(int counts[NUM_JEWEL_TYPES]);
+    void restoreJewelTypes(int counts[NUM_JEWEL_TYPES]);
+
+    // Rendering Functions
     void renderMainMenu();
-
-    //Render Instruction Screen
     void renderInstructions();
-
-    //Render scoreboard
     void renderScoreboard();
+    void renderBoard(); // New function for rendering the board
+    void renderModeSelection();
+    void renderTimedModeLevelSelection();
+    void renderGameOver();
 
-    //Handle button click event
+    // Input Handling
     void handleMainMenuClick(int x, int y);
+    void handleModeSelectionClick(int x, int y);
+    void handleTimedModeLevelSelectionClick(int x, int y);
+    void handleGameOverClick(int x, int y);
 
-    // Load and Save High Score
-    void loadHighScore();
-    void saveHighScore();
-
-    // Restart Game Function
-    void restartGame();
-
-    //Pause/Resume Function
-    void pauseGame();
-
-    //Save and Load game state
+    // Save/Load Functions
+    bool loadHighScore();
+    bool saveHighScore();
     void saveGameState();
-    bool loadGameState(); // Return whether load was successful.
+    bool loadGameState();
 
-private:
-    // Texture loading helper  (This is for texturemanager, not here!)
-    //SDL_Texture* loadTexture(const std::string& filePath); // Removed from Public
-
-public:
-    JewelGame();
-
-    void run();
-    void cleanup();
-
-private:
+    // Game Logic Functions
     void initBoard();
     int getRandomJewel(int x, int y);
     bool isMatchAt(int x, int y, int jewel);
@@ -146,14 +175,34 @@ private:
     void removeMatches();
     void dropJewels();
     void processCascadeMatches();
-    void renderText(const std::string& text, int x, int y, SDL_Color color);
-    void render();
-    bool initFont();
-    bool init();
+    void restartGame();
+    void pauseGame();
+    void startTimedMode(int levelIndex);
 
+    // Animation Update Functions
     void updateSwapAnimation(float deltaTime);
     void updateFallingAnimations(float deltaTime);
     void updateMatchAnimations(float deltaTime);
+
+    // Text Rendering
+    void renderText(const std::string& text, int x, int y, SDL_Color color);
+
+public:
+    // Constructor / Destructor
+    JewelGame();
+    ~JewelGame();
+
+    // Game Loop
+    void run();
+
+private:
+    // Initialization Functions
+    bool init();
+    bool initFont();
+
+    // Rendering Function
+    void render();
+    void cleanup();
 };
 
 #endif
