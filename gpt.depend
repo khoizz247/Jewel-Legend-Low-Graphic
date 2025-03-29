@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1743191443 source:c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.cpp
+1743193229 source:c:\users\lenovo\desktop\thuchanh\gpt\jewelgame.cpp
 	"jewelgame.h"
 	"texturemanager.h"
 	<fstream>
